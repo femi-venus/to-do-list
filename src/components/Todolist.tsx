@@ -29,7 +29,7 @@ function List() {
   };
 
   const handleKeyDown = (e: { key: string }) => {
-    if (e.key === "Enter") {
+    if (e.key === "Enter" && input !== "") {
       const newObject = { task: { input }, completed: false };
       setTasks([...tasks, newObject]);
       setInput("");
@@ -73,13 +73,18 @@ function List() {
               />
               {obj.task.input}
 
-              <button className="tdl--x" onClick={() => handleRemove(index)}>
+              <span className="tdl--x" onClick={() => handleRemove(index)}>
                 x
-              </button>
+              </span>
               <br />
             </div>
           ))}
           <div className="tdl--filters">
+            {_.size(tasks) !== 0 && (
+              <span className="tdl--text">
+                {_.size(ActiveTasks)} tasks left!
+              </span>
+            )}
             <button
               className="tdl--btn-all"
               onClick={() => {
