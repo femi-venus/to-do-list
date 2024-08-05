@@ -56,6 +56,12 @@
   background-color: white;
   padding: 10px;
   text-align: center;
+  font-size: small;
+}
+
+.tdl--text {
+  font-size: small;
+  margin: 10px 5px;
 }
 .tdl--btn-all {
   margin: 10px 5px 10px 200px;
@@ -70,7 +76,7 @@
   border: solid whitesmoke 1px;
 }
 .tdl--btn-clear {
-  margin: 10px 5px 10px 120px;
+  margin: 10px 5px 10px 50px;
   border: solid whitesmoke 1px;
 }
 

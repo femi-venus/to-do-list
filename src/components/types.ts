@@ -23,6 +23,7 @@ export type CHANGE_STATUS = { type: "change_status"; payload: number };
 export type DELETE_TASK = { type: "delete_task"; payload: number };
 export type SET_FILTETERED_TASKS = {
   type: "set_filtered_tasks";
-  payload: Task[];
+
+  payload: string;
 };
 export type CLEAR_COMPLETED = { type: "clear_completed" };

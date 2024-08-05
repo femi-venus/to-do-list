@@ -14,23 +14,46 @@ const reducer = produce((state: State, action: Action) => {
   switch (action.type) {
     case "set_input":
       state.input = action.payload;
+
       break;
     case "add_task":
       state.tasks.push(action.payload);
+      state.filteredTasks.push(action.payload);
+
       state.input = ""; // Clear input after adding task
       break;
     case "change_status":
-      state.tasks[action.payload].completed =
-        !state.tasks[action.payload].completed;
+      const changed_status = state.tasks.map((task, i) =>
+        i === action.payload ? { ...task, completed: !task.completed } : task
+      );
+      state.tasks = changed_status;
+      state.filteredTasks = changed_status;
+
       break;
     case "delete_task":
       state.tasks.filter((task, index) => index !== action.payload);
       break;
     case "set_filtered_tasks":
-      state.filteredTasks = action.payload;
+      switch (action.payload) {
+        case "all":
+          state.filteredTasks = state.tasks;
+          break;
+        case "active":
+          state.filteredTasks = state.tasks.filter((task) => !task.completed);
+          break;
+        case "completed":
+          state.filteredTasks = state.tasks.filter((task) => task.completed);
+          break;
+        default:
+          state.filteredTasks = state.tasks;
+      }
+
       break;
     case "clear_completed":
-      state.tasks = state.tasks.filter((task) => !task.completed);
+      const cleared_tasks = state.tasks.filter((task) => !task.completed);
+      state.tasks = cleared_tasks;
+      state.filteredTasks = cleared_tasks;
+
       break;
     default:
       break;
@@ -39,28 +62,6 @@ const reducer = produce((state: State, action: Action) => {
 
 function List() {
   const [state, dispatch] = useReducer(reducer, initialState);
-
-  useEffect(() => {
-    dispatch({ type: "set_filtered_tasks", payload: state.tasks });
-  }, [state.tasks]);
-
-  const filterTasks = (filter: string) => {
-    let filteredTasks;
-    switch (filter) {
-      case "all":
-        filteredTasks = state.tasks;
-        break;
-      case "active":
-        filteredTasks = state.tasks.filter((task) => !task.completed);
-        break;
-      case "completed":
-        filteredTasks = state.tasks.filter((task) => task.completed);
-        break;
-      default:
-        filteredTasks = state.tasks;
-    }
-    dispatch({ type: "set_filtered_tasks", payload: filteredTasks });
-  };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     dispatch({ type: "set_input", payload: e.target.value });
@@ -113,18 +114,27 @@ function List() {
             <span className="tdl--text">
               {state.tasks.filter((task) => !task.completed).length} tasks left!
             </span>
-            <button className="tdl--btn-all" onClick={() => filterTasks("all")}>
+            <button
+              className="tdl--btn-all"
+              onClick={() =>
+                dispatch({ type: "set_filtered_tasks", payload: "all" })
+              }
+            >
               All
             </button>
             <button
               className="tdl--btn-active"
-              onClick={() => filterTasks("active")}
+              onClick={() =>
+                dispatch({ type: "set_filtered_tasks", payload: "active" })
+              }
             >
               Active
             </button>
             <button
               className="tdl--btn-completed"
-              onClick={() => filterTasks("completed")}
+              onClick={() =>
+                dispatch({ type: "set_filtered_tasks", payload: "completed" })
+              }
             >
               Completed
             </button>
