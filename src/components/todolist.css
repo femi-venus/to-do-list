@@ -40,6 +40,8 @@
 .tdl--x {
   float: right;
   padding: 5px 10px;
+  background-color: white;
+  cursor: pointer;
 }
 .tdl--task {
   padding: 10px 10px 10px 10px;
