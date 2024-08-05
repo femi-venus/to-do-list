@@ -31,7 +31,12 @@ const reducer = produce((state: State, action: Action) => {
 
       break;
     case "delete_task":
-      state.tasks.filter((task, index) => index !== action.payload);
+      const undeleted_tasks = state.tasks.filter(
+        (task, index) => index !== action.payload
+      );
+      state.tasks = undeleted_tasks;
+      state.filteredTasks = undeleted_tasks;
+
       break;
     case "set_filtered_tasks":
       switch (action.payload) {
